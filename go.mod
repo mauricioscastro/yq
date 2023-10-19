@@ -11,6 +11,7 @@ require (
 	github.com/goccy/go-yaml v1.11.2
 	github.com/jinzhu/copier v0.4.0
 	github.com/magiconair/properties v1.8.7
+	github.com/mikefarah/yq/v4 v4.35.2
 	github.com/pelletier/go-toml/v2 v2.1.0
 	github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e
 	github.com/spf13/cobra v1.7.0
@@ -32,4 +33,4 @@ require (
 
 go 1.20
 
-replace github.com/mikefarah/yq/v4 v4.35.2 => github.com/mauricioscastro/yq/v4 v4.35.2
+replace github.com/mikefarah/yq/v4 v4.35.2 => github.com/mauricioscastro/yq/v4 v4.35.200
