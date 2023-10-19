@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	yaml "gopkg.in/yaml.v3"
 )
 
 // A yaml expression evaluator that runs the expression multiple times for each given yaml document.
@@ -13,7 +15,7 @@ import (
 // cross document expressions.
 type StreamEvaluator interface {
 	Evaluate(filename string, reader io.Reader, node *ExpressionNode, printer Printer, decoder Decoder) (uint, error)
-	EvaluateFiles(expression string, filenames []string, printer Printer, decoder Decoder) error
+	EvaluateFiles(expression string, filenames []string, printer Printer, decoder Decoder, extra_reader io.Reader) error
 	EvaluateNew(expression string, printer Printer) error
 }
 
@@ -31,7 +33,12 @@ func (s *streamEvaluator) EvaluateNew(expression string, printer Printer) error 
 	if err != nil {
 		return err
 	}
-	candidateNode := createScalarNode(nil, "")
+	candidateNode := &CandidateNode{
+		Document:  0,
+		Filename:  "",
+		Node:      &yaml.Node{Kind: yaml.DocumentNode, Content: []*yaml.Node{{Tag: "!!null", Kind: yaml.ScalarNode}}},
+		FileIndex: 0,
+	}
 	inputList := list.New()
 	inputList.PushBack(candidateNode)
 
@@ -42,7 +49,7 @@ func (s *streamEvaluator) EvaluateNew(expression string, printer Printer) error 
 	return printer.PrintResults(result.MatchingNodes)
 }
 
-func (s *streamEvaluator) EvaluateFiles(expression string, filenames []string, printer Printer, decoder Decoder) error {
+func (s *streamEvaluator) EvaluateFiles(expression string, filenames []string, printer Printer, decoder Decoder, extra_reader io.Reader) error {
 	var totalProcessDocs uint
 	node, err := ExpressionParser.ParseExpression(expression)
 	if err != nil {
@@ -50,7 +57,7 @@ func (s *streamEvaluator) EvaluateFiles(expression string, filenames []string, p
 	}
 
 	for _, filename := range filenames {
-		reader, err := readStream(filename)
+		reader, err := readStream(filename, extra_reader)
 
 		if err != nil {
 			return err
@@ -91,9 +98,9 @@ func (s *streamEvaluator) Evaluate(filename string, reader io.Reader, node *Expr
 		} else if errorReading != nil {
 			return currentIndex, fmt.Errorf("bad file '%v': %w", filename, errorReading)
 		}
-		candidateNode.document = currentIndex
-		candidateNode.filename = filename
-		candidateNode.fileIndex = s.fileIndex
+		candidateNode.Document = currentIndex
+		candidateNode.Filename = filename
+		candidateNode.FileIndex = s.fileIndex
 
 		inputList := list.New()
 		inputList.PushBack(candidateNode)
