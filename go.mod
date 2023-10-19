@@ -1,4 +1,4 @@
-module github.com/mikefarah/yq/v4
+module github.com/mauricioscastro/yq/v4
 
 require (
 	github.com/a8m/envsubst v1.4.2
