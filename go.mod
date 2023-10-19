@@ -33,4 +33,4 @@ require (
 
 go 1.20
 
-replace github.com/mikefarah/yq/v4 v4.35.2 => github.com/mauricioscastro/yq/v4 v4.35.200
+replace github.com/mikefarah/yq/v4 v4.35.2 => github.com/mauricioscastro/yq/v4 v4.35.201
