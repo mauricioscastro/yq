@@ -1,28 +1,28 @@
 package yqlib
 
-var evaluateNodesScenario = []expressionScenario{
-	{
-		document:   `a: hello`,
-		expression: `.a`,
-		expected: []string{
-			"D0, P[a], (!!str)::hello\n",
-		},
-	},
-	{
-		document:   `a: hello`,
-		expression: `.`,
-		expected: []string{
-			"D0, P[], (!!map)::a: hello\n",
-		},
-	},
-	{
-		document:   `- a: "yes"`,
-		expression: `.[] | has("a")`,
-		expected: []string{
-			"D0, P[0], (!!bool)::true\n",
-		},
-	},
-}
+// var evaluateNodesScenario = []expressionScenario{
+// 	{
+// 		document:   `a: hello`,
+// 		expression: `.a`,
+// 		expected: []string{
+// 			"D0, P[a], (!!str)::hello\n",
+// 		},
+// 	},
+// 	{
+// 		document:   `a: hello`,
+// 		expression: `.`,
+// 		expected: []string{
+// 			"D0, P[], (!!map)::a: hello\n",
+// 		},
+// 	},
+// 	{
+// 		document:   `- a: "yes"`,
+// 		expression: `.[] | has("a")`,
+// 		expected: []string{
+// 			"D0, P[0], (!!bool)::true\n",
+// 		},
+// 	},
+// }
 
 // func TestAllAtOnceEvaluateNodes(t *testing.T) {
 // 	var evaluator = NewAllAtOnceEvaluator()
